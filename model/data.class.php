@@ -6,9 +6,8 @@ class Data {
 	public function __construct () {
 		$base = "pierreduplouy";
 		$this->base = mysqli_connect($_SERVER['REMOTE_HOST'], "root", "", $base);
-		if (mysqli_connect_errno($this->base)) {
+		if (mysqli_connect_errno($this->base))
 			die(mysqli_connect_error());
-		}
 		if (self::$v)
 			echo "object construct".PHP_EOL;
 	}
@@ -24,6 +23,26 @@ class Data {
 		echo "verbose set to ".self::$v.PHP_EOL;
 	}
 
+	public function get_category () {
+		if ($result = $this->_query("SELECT name FROM category")) {
+				while ($row = $result->fetch_array())
+					$tab[] = $row;
+				return ($tab);
+			}
+		return NULL;
+	}
+
+	public function add_category ($c) {
+		if (isset($c) && !empty($c)
+			&& !($res = mysqli_query($this->base, "SELECT name FROM category WHERE name='".$c."';"))
+			|| ($res->num_rows === 0 ))
+			mysqli_query($this->base, "INSERT INTO category(name) VALUES('".$c."');");
+	}
+
+	public function del_category ($c) {
+		mysqli_query($this->base, "DELETE FROM category WHERE name='".$c."';");
+	}
+
 	public function connect ($login, $passwd) {
 		$passwd = $this->_pwd_hash($passwd);
 		$login = $this->_secure($login);
@@ -32,10 +51,8 @@ class Data {
 		if (($result = $this->_query("SELECT password, access FROM user WHERE login='".$login."';"))
 			&& $result->num_rows !== 0) {
 				while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-					if (self::$v) {
-						echo "user pwd in db = ";
-						print_r($row);
-					}
+					if (self::$v)
+						echo "user pwd in db = ".print_r($row);
 					if ($row['password'] === $passwd) {
 						$_SESSION['login'] = $login;
 						$_SESSION['access'] = $row['access'];
@@ -52,7 +69,7 @@ class Data {
 
 	public function disconnect () {
 		unset($_SESSION['login']);
-		unset($_SESSION['right']);
+		unset($_SESSION['access']);
 	}
 
 	public function passwd ($login, $old, $new) {
@@ -73,9 +90,8 @@ class Data {
 	}
 
 	private function _secure ($string) {
-		if (ctype_digit($string)) {
+		if (ctype_digit($string))
 			$string = intval($string);
-		}
 		else {
 			$string = mysqli_real_escape_string($this->base, $string);
 			$string = addcslashes($string, '%_');

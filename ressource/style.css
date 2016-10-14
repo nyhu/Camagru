@@ -1,0 +1,60 @@
+body {
+	background-color:#171a21;
+	margin:0px;
+	margin-top:10px;
+}
+
+a {
+	color:white;
+	text-decoration:none;
+}
+
+.menu {
+	width:100%;
+	background-color:black;
+	color:white;
+	display:flex;
+	flex-wrap:nowrap;
+	justify-content:space-around;
+}
+
+.bottom {
+	width:100%;
+	position:fixed;
+	bottom:0px;
+}
+
+.mitem {
+	margin:10px;
+	padding:5%;
+}
+
+.mactive {
+	background-color:#191a31;
+	margin:10px;
+	padding:5%;
+}
+
+.gmenu {
+	width:15%;
+	background-color:black;
+	color:white;
+	display:flex;
+	flex-wrap:nowrap;
+	flex-direction:column;
+	justify-content:space-around;
+}
+
+.gmitem {
+	display-content:inline-flex;
+	margin:10px;
+	padding:5%;
+}
+
+.gmactive {
+	display-content:inline-flex;
+	display:inline-flex;
+	background-color:#191a31;
+	margin:10px;
+	padding:5%;
+}
